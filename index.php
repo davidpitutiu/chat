@@ -15,32 +15,47 @@
     
 </head>
 <body>
+    <?php
+      /*session_start();
+      $_SESSION['username']="Faisal Imaz";*/
+    ?>
     <h1>Welcome</h1>
     <div id="wrapper">
         <div class="chat-wrapper">
             <div id="chat">
             
             </div>
-            <form method="POST">
+            <form method="POST" id='messageFrm'>
                 <textarea name="message" cols="30" rows="10" class="textarea"></textarea>
             </form>
         </div>
     </div>
     <script>
-        $('.textarea').keyup(function(e){
-            if(e.which==13)
-            {
-                $('form').submit();
-            }
-        });
-        $('form').submit(function(){
-            var message = $('.textarea').val();
-            $.post('handlers/messages.php?action=sendMessage&message='+message,function(
-                response){
-                    alert(response);
-                });
-            return false;
-        });
+        LoadChat();
+        function LoadChat()
+        {
+            $.post('handlers/messages.php?action=sendMessages' , function(response){
+                $('#chat').html(response);
+            });
+        }
+
+            $('.textarea').keyup(function(e){
+                if(e.which==13)
+                {
+                    $('form').submit();
+                }
+            });
+            $('form').submit(function(){
+                var message = $('.textarea').val();
+                $.post('handlers/messages.php?action=sendMessage&message='+message,function(
+                    response){
+                        if(response==1)
+                        {
+                            document.getElementById('messageFrm').reset();
+                        }
+                    });
+                return false;
+            });
     </script>
 </body>
 </html>
