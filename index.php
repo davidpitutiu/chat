@@ -15,12 +15,8 @@
     
 </head>
 <body>
-    <?php
-      /*session_start();
-      $_SESSION['username']="Faisal Imaz";*/
-    ?>
-    <h1>Welcome</h1>
     <div id="wrapper">
+        <h1>Welcome <?php session_start(); echo $_SESSION['username'];?> to my website</h1>
         <div class="chat-wrapper">
             <div id="chat">
             
@@ -32,10 +28,21 @@
     </div>
     <script>
         LoadChat();
+        setInterval(function(){
+
+        },1000);
         function LoadChat()
         {
-            $.post('handlers/messages.php?action=sendMessages' , function(response){
+            $.post('handlers/messages.php?action=getMessages' , function(response){
+                var scrollpos =$('#chat').scrollTop();
+                var scrollpos= parseInt(scrollpos) +520;
+                var scrollHeight=$('#chat').prop('scrollHeight');
                 $('#chat').html(response);
+                    if(scrollpos<scrollHeight){
+
+                    }else{
+                        $('#chat').scrollTop($('#chat').prop('scrollHeight'));
+                    }
             });
         }
 
@@ -51,6 +58,7 @@
                     response){
                         if(response==1)
                         {
+                            LoadChat();
                             document.getElementById('messageFrm').reset();
                         }
                     });

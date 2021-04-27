@@ -5,21 +5,26 @@
         case "sendMessage":
             //global $db;
             session_start();
-            $query=$db->prepare("INSERT INTO messages (message) values(?)");
-            $run=$query->execute([ $_REQUEST['message']]);
+            $query=$db->prepare("INSERT INTO messages (user,message) values(?,?)");
+            $run=$query->execute([$_SESSION ['username'], $_REQUEST['message']]);
             if($run){
                 echo 1;
                 exit;
             }
         break;
-        /*case "getMessages":
+        case "getMessages":
             $query=$db->prepare("SELECT * FROM messages");
             $run=$query->execute();
-            $rs = $query->fetch(PDO::FETCH_OBJ);
+            $rs = $query->fetchAll(PDO::FETCH_OBJ);
+            $chat='';
             foreach($rs as $message){
-                $chat .= $message->message;
+                $chat .= "<div class='single-message'>
+                            <strong>$message->user: </strong> $message->message 
+                            <span>$message->date </span>          
+                            </div>
+                            ";
             }
             echo $chat;
-        break;*/
+        break;
     }
 ?>
